@@ -174,6 +174,8 @@ class Game:
                 return False
 
         self.ongoing = False
+        for player in self.players:
+            player.role = Role.UNASSIGNED
 
         return True
 

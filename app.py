@@ -19,6 +19,11 @@ def main():
     # Get the shared game instance for user interactions
     game = get_shared_game()
 
+    # Subtle refresh button in sidebar
+    with st.sidebar:
+        if st.button("🔄 Refresh"):
+            st.rerun()
+
     with st.expander("Debug Information", expanded=False):
         st.write("This section is for debugging purposes.")
         st.write("You can add any debug information here.")
@@ -45,9 +50,6 @@ def main():
     with st.sidebar:
         st.header("Game Controls")
         game_controls()
-
-    if st.button("Refresh", width="stretch"):
-        st.rerun()
 
 
 if __name__ == "__main__":

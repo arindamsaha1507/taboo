@@ -38,14 +38,14 @@ def add_player(game: Game):
         if game.ongoing:
             return
 
-        # Team selection (always available)
-        st.subheader("Team Selection")
-        team_options = ["Team A", "Team B"]
-        current_team_index = 0
-        if player.team == Team.B:
-            current_team_index = 1
-
         if not game.turns:
+
+            # Team selection (always available)
+            st.subheader("Team Selection")
+            team_options = ["Team A", "Team B"]
+            current_team_index = 0
+            if player.team == Team.B:
+                current_team_index = 1
 
             team_choice = st.selectbox(
                 "Select your team:",
@@ -251,7 +251,9 @@ def display_main_interface():
 
     game = get_shared_game()
 
-    st.markdown(f"#### Turn {game.current_turn} of Round {game.current_round}")
+    st.markdown(
+        f"#### Turn {(game.current_turn - 1) % 2 + 1} of Round {game.current_round}"
+    )
 
     player = st.session_state.get("player_name")
     if not player:
@@ -292,7 +294,7 @@ def game_controls():
     # Add buttons for game management
 
     if not game.ongoing:
-        if st.button("🎮 Start Game"):
+        if st.button("🎮 Start Turn"):
             if len(game.players) < MIN_PLAYERS:
                 st.error(
                     f"At least {MIN_PLAYERS} players are required to start the game!"
@@ -302,6 +304,11 @@ def game_controls():
 
             if game.check_teams():
                 game.start_game()
+                time.sleep(2)
+            else:
+                st.error(
+                    "Cannot start the game. Please check team and role assignments."
+                )
                 time.sleep(2)
 
             st.rerun()
