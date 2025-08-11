@@ -307,3 +307,247 @@
   border-radius: 8px;
   pointer-events: none;
 }
+
+/* Fancy Scorecard Styles */
+.scoreboard-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin: 20px 0;
+  padding: 20px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.scorecard {
+  flex: 1;
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.scorecard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15), 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.team-a-card {
+  border-left: 5px solid #ff6b6b;
+  background: linear-gradient(135deg, #fff 0%, #fff0f0 100%);
+}
+
+.team-b-card {
+  border-left: 5px solid #4ecdc4;
+  background: linear-gradient(135deg, #fff 0%, #f0ffff 100%);
+}
+
+.scorecard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 2px dotted #e0e0e0;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.scorecard-header .team-info {
+  display: flex;
+  align-items: center;
+}
+
+.team-icon {
+  font-size: 1.5em;
+  margin-right: 10px;
+}
+
+.team-name {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #2c3e50;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.team-role {
+  font-size: 0.8em;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 12px;
+  background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+  color: #495057;
+  border: 1px solid #dee2e6;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-left: auto;
+}
+
+.team-a-card .team-role {
+  background: linear-gradient(45deg, #fff5f5, #ffe8e8);
+  color: #c53030;
+  border-color: #feb2b2;
+}
+
+.team-b-card .team-role {
+  background: linear-gradient(45deg, #f0fdfa, #e6fffa);
+  color: #047857;
+  border-color: #9ae6b4;
+}
+
+.score-display {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.score-number {
+  font-size: 3.5em;
+  font-weight: 900;
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.team-a-card .score-number {
+  background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.team-b-card .score-number {
+  background: linear-gradient(45deg, #4ecdc4, #6dddd8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.score-label {
+  font-size: 0.9em;
+  color: #7f8c8d;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 5px;
+}
+
+.scorecard-footer {
+  margin-top: 20px;
+}
+
+.progress-bar {
+  height: 8px;
+  background: #ecf0f1;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.8s ease;
+  position: relative;
+}
+
+.team-a-progress {
+  background: linear-gradient(90deg, #ff6b6b, #ff8e8e);
+  box-shadow: 0 2px 4px rgba(255, 107, 107, 0.3);
+}
+
+.team-b-progress {
+  background: linear-gradient(90deg, #4ecdc4, #6dddd8);
+  box-shadow: 0 2px 4px rgba(78, 205, 196, 0.3);
+}
+
+.scoreboard-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.round-info {
+  background: white;
+  padding: 15px 20px;
+  border-radius: 25px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  border: 3px solid #f8f9fa;
+}
+
+.round-number {
+  font-size: 1.8em;
+  font-weight: 900;
+  color: #2c3e50;
+  line-height: 1;
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.round-total {
+  font-size: 0.8em;
+  color: #7f8c8d;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 2px;
+}
+
+.turn-info {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 2px dotted #e0e0e0;
+}
+
+.turn-number {
+  font-size: 1.2em;
+  font-weight: 700;
+  color: #34495e;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Scorecard animations */
+@keyframes scoreUpdate {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.scorecard.score-updated .score-number {
+  animation: scoreUpdate 0.6s ease;
+}
+
+/* Responsive design for scorecards */
+@media (max-width: 768px) {
+  .scoreboard-container {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .scorecard {
+    width: 100%;
+  }
+
+  .score-number {
+    font-size: 2.5em;
+  }
+}

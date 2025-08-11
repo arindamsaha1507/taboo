@@ -120,3 +120,65 @@ def get_taboo_card_html(
 {team_color}
 </div>
 </div>"""
+
+
+def get_scorecard_html(
+    team_a_score: int,
+    team_b_score: int,
+    current_round: int,
+    total_rounds: int,
+    current_turn: int,
+    guessing_team: str,
+) -> str:
+    """Generate HTML for fancy scorecards."""
+    # Determine role indicators for each team
+    team_a_role = "🤔 Guessing" if guessing_team == "Team A" else "🔍 Checking"
+    team_b_role = "🤔 Guessing" if guessing_team == "Team B" else "🔍 Checking"
+
+    return f"""<div class="scoreboard-container">
+<div class="scorecard team-a-card">
+<div class="scorecard-header">
+<div class="team-info">
+<span class="team-icon">🔴</span>
+<span class="team-name">Team A</span>
+</div>
+<span class="team-role">{team_a_role}</span>
+</div>
+<div class="score-display">
+<div class="score-number">{team_a_score}</div>
+<div class="score-label">Points</div>
+</div>
+<div class="scorecard-footer">
+<div class="progress-bar">
+<div class="progress-fill team-a-progress" style="width: {(team_a_score / max(team_a_score + team_b_score, 1)) * 100}%"></div>
+</div>
+</div>
+</div>
+<div class="scoreboard-divider">
+<div class="round-info">
+<div class="round-number">Round {current_round}</div>
+<div class="round-total">of {total_rounds}</div>
+<div class="turn-info">
+<div class="turn-number">Turn {current_turn}</div>
+</div>
+</div>
+</div>
+<div class="scorecard team-b-card">
+<div class="scorecard-header">
+<div class="team-info">
+<span class="team-icon">🔵</span>
+<span class="team-name">Team B</span>
+</div>
+<span class="team-role">{team_b_role}</span>
+</div>
+<div class="score-display">
+<div class="score-number">{team_b_score}</div>
+<div class="score-label">Points</div>
+</div>
+<div class="scorecard-footer">
+<div class="progress-bar">
+<div class="progress-fill team-b-progress" style="width: {(team_b_score / max(team_a_score + team_b_score, 1)) * 100}%"></div>
+</div>
+</div>
+</div>
+</div>"""

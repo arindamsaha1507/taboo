@@ -117,9 +117,8 @@ class Turn:
     @property
     def tabooed(self) -> bool:
         """Check if the last guess was a taboo word."""
-        return self.guesses and self.guesses[-1] in self.card.taboo_words + [
-            self.card.word
-        ]
+
+        return self.hints and self.hints[-1] in self.card.taboo_words + [self.card.word]
 
     @property
     def unsuccessfully_guessed(self) -> bool:

@@ -18,6 +18,7 @@ from html_templates import (
     get_player_separator,
     get_no_players_html,
     get_taboo_card_html,
+    get_scorecard_html,
 )
 
 
@@ -251,6 +252,10 @@ def display_main_interface():
 
     game = get_shared_game()
 
+    # Display fancy scorecards at the top when game is ongoing
+    if game.ongoing:
+        display_scorecards()
+
     st.markdown(
         f"#### Turn {(game.current_turn - 1) % 2 + 1} of Round {game.current_round}"
     )
@@ -366,9 +371,9 @@ def display_card(card: Card):
     team_color = "neutral"
 
     if current_player_name:
-        current_player = [p for p in game.players if p.name == current_player_name]
-        if current_player:
-            current_player = current_player[0]
+        current_player = next(
+            (p for p in game.players if p.name == current_player_name), None
+        )
         if current_player and hasattr(current_player, "team"):
             team_color = (
                 current_player.team.value
@@ -379,6 +384,25 @@ def display_card(card: Card):
     # Display the card using HTML template
     st.markdown(
         get_taboo_card_html(card.word, card.taboo_words, team_color),
+        unsafe_allow_html=True,
+    )
+
+
+def display_scorecards():
+    """Display fancy scorecards showing current game scores."""
+    game = get_shared_game()
+    team_a_score, team_b_score = game.score
+
+    # Display the fancy scorecards
+    st.markdown(
+        get_scorecard_html(
+            team_a_score,
+            team_b_score,
+            game.current_round,
+            game.max_rounds,
+            (game.current_turn - 1) % 2 + 1,
+            game.guessing_team.value,
+        ),
         unsafe_allow_html=True,
     )
 
@@ -395,7 +419,7 @@ def end_turn(score: int):
         game.turns[-1].score = (1, 0) if game.guessing_team == Team.A else (0, 1)
 
     elif score == -1:
-        game.turns[-1].score = (-1, 0) if game.checking_team == Team.A else (0, -1)
+        game.turns[-1].score = (0, 1) if game.checking_team == Team.A else (1, 0)
 
     else:
         st.error(
