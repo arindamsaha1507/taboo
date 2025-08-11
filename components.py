@@ -350,6 +350,29 @@ def display_card(card: Card):
     )
 
 
+def chat_boxes():
+    """Display chat boxes for hints and guesses."""
+    game = get_shared_game()
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.subheader("Hints")
+        with st.container(height=500):
+            if game.turns:
+                for hint, hinter in zip(game.turns[-1].hints, game.turns[-1].hinters):
+                    st.write(f"💡 {hinter.name}: {hint.capitalize()}")
+
+    with col2:
+        st.subheader("Guesses")
+        with st.container(height=500):
+            if game.turns:
+                for guess, guesser in zip(
+                    game.turns[-1].guesses, game.turns[-1].guessers
+                ):
+                    st.write(f"💭 {guesser.name}: {guess.capitalize()}")
+
+
 def card_maker_controls():
     """Display card maker controls for creating new cards."""
     game = get_shared_game()
@@ -385,23 +408,8 @@ def card_maker_controls():
             else:
                 st.error("Please provide both a word and taboo words.")
 
-    col1, col2 = st.columns(2)
-
-    with col1:
-        st.subheader("Hints")
-        with st.container(height=500):
-            if game.turns:
-                for hint, hinter in zip(game.turns[-1].hints, game.turns[-1].hinters):
-                    st.write(f"💡 {hinter.name}: {hint.capitalize()}")
-
-    with col2:
-        st.subheader("Guesses")
-        with st.container(height=500):
-            if game.turns:
-                for guess, guesser in zip(
-                    game.turns[-1].guesses, game.turns[-1].guessers
-                ):
-                    st.write(f"💭 {guesser.name}: {guess.capitalize()}")
+    if game.turns and len(game.turns) == game.current_turn:
+        chat_boxes()
 
 
 def leader_interface():
@@ -433,34 +441,26 @@ def leader_interface():
 
     # Additional leader controls can be added here
 
-    col1, col2 = st.columns(2)
+    if game.turns and len(game.turns) == game.current_turn:
+        chat_boxes()
 
-    with col1:
-        st.subheader("Hints")
-        with st.container(height=500):
-            if game.turns:
-                for hint, hinter in zip(game.turns[-1].hints, game.turns[-1].hinters):
-                    st.write(f"💡 {hinter.name}: {hint.capitalize()}")
-
-    with col2:
-        st.subheader("Guesses")
-        with st.container(height=500):
-            if game.turns:
-                for guess, guesser in zip(
-                    game.turns[-1].guesses, game.turns[-1].guessers
-                ):
-                    st.write(f"💭 {guesser.name}: {guess.capitalize()}")
-
-    new_hint = st.text_input("Add a new hint:")
-    if st.button("Add Hint"):
-        if new_hint.strip() and new_hint.strip() not in game.turns[-1].hints:
-            game.turns[-1].add_hint(new_hint, player)
-            st.rerun()
+        new_hint = st.text_input("Add a new hint:")
+        if st.button("Add Hint"):
+            if new_hint.strip() and new_hint.strip() not in game.turns[-1].hints:
+                game.turns[-1].add_hint(new_hint, player)
+                st.rerun()
 
 
 def guesser_interface():
     """Display the guesser interface for managing game state."""
     game = get_shared_game()
+
+    if not (
+        game.turns
+        and len(game.turns) == game.current_turn
+        and game.turns[game.current_turn - 1].card is not None
+    ):
+        st.info("No card created yet. Please create a card first.")
 
     player = st.session_state.get("player_name")
     if not player:
@@ -475,29 +475,14 @@ def guesser_interface():
         time.sleep(2)
         st.rerun()
 
-    col1, col2 = st.columns(2)
+    if game.turns and len(game.turns) == game.current_turn:
+        chat_boxes()
 
-    with col1:
-        st.subheader("Hints")
-        with st.container(height=500):
-            if game.turns:
-                for hint, hinter in zip(game.turns[-1].hints, game.turns[-1].hinters):
-                    st.write(f"💡 {hinter.name}: {hint.capitalize()}")
-
-    with col2:
-        st.subheader("Guesses")
-        with st.container(height=500):
-            if game.turns:
-                for guess, guesser in zip(
-                    game.turns[-1].guesses, game.turns[-1].guessers
-                ):
-                    st.write(f"💭 {guesser.name}: {guess.capitalize()}")
-
-    new_guess = st.text_input("Add a new guess:")
-    if st.button("Add Guess"):
-        if new_guess.strip() and new_guess.strip() not in game.turns[-1].guesses:
-            game.turns[-1].add_guess(new_guess, player)
-            st.rerun()
+        new_guess = st.text_input("Add a new guess:")
+        if st.button("Add Guess"):
+            if new_guess.strip() and new_guess.strip() not in game.turns[-1].guesses:
+                game.turns[-1].add_guess(new_guess, player)
+                st.rerun()
 
 
 def checker_interface():
@@ -515,26 +500,11 @@ def checker_interface():
     else:
         st.info("No card created yet. Please create a card first.")
 
-    col1, col2 = st.columns(2)
+    if game.turns and len(game.turns) == game.current_turn:
+        chat_boxes()
 
-    with col1:
-        st.subheader("Hints")
-        with st.container(height=500):
-            if game.turns:
-                for hint, hinter in zip(game.turns[-1].hints, game.turns[-1].hinters):
-                    st.write(f"💡 {hinter.name}: {hint.capitalize()}")
-
-    with col2:
-        st.subheader("Guesses")
-        with st.container(height=500):
-            if game.turns:
-                for guess, guesser in zip(
-                    game.turns[-1].guesses, game.turns[-1].guessers
-                ):
-                    st.write(f"💭 {guesser.name}: {guess.capitalize()}")
-
-    if st.button("Claim Cheating", width="stretch"):
-        game.next_turn()
-        st.success("Cheating claimed! Moving to next turn.")
-        time.sleep(2)
-        st.rerun()
+        if st.button("Claim Cheating", width="stretch"):
+            game.next_turn()
+            st.success("Cheating claimed! Moving to next turn.")
+            time.sleep(2)
+            st.rerun()
