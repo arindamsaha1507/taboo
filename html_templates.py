@@ -43,7 +43,11 @@ def get_player_table_close():
 
 def get_current_player_html(player_name: str) -> str:
     """Generate HTML for current player highlight."""
-    return f'<div class="current-player" style="padding: 10px; border-radius: 8px;"><strong>🫵 {player_name}</strong></div>'
+    css_style = "padding: 10px; border-radius: 8px;"
+    html_template = (
+        '<div class="current-player" style="{}"><strong>🫵 {}</strong></div>'
+    )
+    return html_template.format(css_style, player_name)
 
 
 def get_team_html(team_value: str) -> str:
