@@ -93,6 +93,11 @@ class Turn:
     guessers: list[Player] = field(default_factory=list)
 
     max_guesses: int = 15
+    max_hints: int = 5
+
+    end_turn: bool = False
+
+    score: tuple[int, int] = (0, 0)  # (team_a_score, team_b_score)
 
     def add_hint(self, hint: str, player: Player):
         """Add a hint to the turn."""
@@ -110,9 +115,18 @@ class Turn:
         return self.guesses and self.guesses[-1] == self.card.word
 
     @property
+    def tabooed(self) -> bool:
+        """Check if the last guess was a taboo word."""
+        return self.guesses and self.guesses[-1] in self.card.taboo_words + [
+            self.card.word
+        ]
+
+    @property
     def unsuccessfully_guessed(self) -> bool:
         """Check if the card was unsuccessfully guessed."""
-        return not self.successfully_guessed and len(self.guesses) >= self.max_guesses
+        return (
+            not self.successfully_guessed and len(self.guesses) >= self.max_guesses
+        ) or self.tabooed
 
     @property
     def is_ongoing(self) -> bool:

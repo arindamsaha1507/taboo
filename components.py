@@ -255,6 +255,25 @@ def display_main_interface():
         f"#### Turn {(game.current_turn - 1) % 2 + 1} of Round {game.current_round}"
     )
 
+    if game.turns and len(game.turns) == game.current_turn and game.turns[-1].end_turn:
+        st.markdown("Score for the turn is:")
+        st.markdown(f"Team A: {game.turns[-1].score[0]}")
+        st.markdown(f"Team B: {game.turns[-1].score[1]}")
+
+        chat_boxes()
+
+        if st.button("Next Turn", key="next_turn_button"):
+            if game.next_turn():
+                st.success("Turn ended. Moving to next turn.")
+                time.sleep(2)
+                st.rerun()
+            else:
+                st.error("Game over or no more turns left.")
+                time.sleep(2)
+                st.rerun()
+
+        return
+
     player = st.session_state.get("player_name")
     if not player:
         st.warning("Please join the game first!")
@@ -348,6 +367,29 @@ def display_card(card: Card):
         get_taboo_card_html(card.word, card.taboo_words, team_color),
         unsafe_allow_html=True,
     )
+
+
+def end_turn(score: int):
+    """End the current turn and update game state."""
+
+    game = get_shared_game()
+
+    if score == 0:
+        game.turns[-1].score = (0, 0)
+
+    elif score == 1:
+        game.turns[-1].score = (1, 0) if game.guessing_team == Team.A else (0, 1)
+
+    elif score == -1:
+        game.turns[-1].score = (-1, 0) if game.checking_team == Team.A else (0, -1)
+
+    else:
+        st.error(
+            "Invalid score value. Use -1 for cheating, 0 for no score, or 1 for success."
+        )
+        return
+
+    game.turns[-1].end_turn = True
 
 
 def chat_boxes():
@@ -447,7 +489,17 @@ def leader_interface():
         new_hint = st.text_input("Add a new hint:")
         if st.button("Add Hint"):
             if new_hint.strip() and new_hint.strip() not in game.turns[-1].hints:
-                game.turns[-1].add_hint(new_hint, player)
+
+                if len(game.turns[-1].hints) < game.turns[-1].max_hints:
+                    game.turns[-1].add_hint(new_hint, player)
+                else:
+                    st.error("Maximum hints reached for this turn.")
+                    time.sleep(2)
+                    st.rerun()
+
+                if game.turns[-1].tabooed:
+                    end_turn(-1)
+
                 st.rerun()
 
 
@@ -481,7 +533,15 @@ def guesser_interface():
         new_guess = st.text_input("Add a new guess:")
         if st.button("Add Guess"):
             if new_guess.strip() and new_guess.strip() not in game.turns[-1].guesses:
+
                 game.turns[-1].add_guess(new_guess, player)
+
+                if game.turns[-1].successfully_guessed:
+                    end_turn(1)
+
+                if len(game.turns[-1].guesses) >= game.turns[-1].max_guesses:
+                    end_turn(0)
+
                 st.rerun()
 
 
@@ -504,7 +564,8 @@ def checker_interface():
         chat_boxes()
 
         if st.button("Claim Cheating", width="stretch"):
-            game.next_turn()
-            st.success("Cheating claimed! Moving to next turn.")
-            time.sleep(2)
-            st.rerun()
+            # game.next_turn()
+            # st.success("Cheating claimed! Moving to next turn.")
+            # time.sleep(2)
+            # st.rerun()
+            end_turn(-1)
