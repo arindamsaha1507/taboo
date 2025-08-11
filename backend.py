@@ -172,6 +172,8 @@ class Game:
                 st.warning("Game over! Maximum rounds reached.")
                 return False
 
+        self.ongoing = False
+
         return True
 
     @property

@@ -28,9 +28,10 @@ def add_player(game: Game):
         # Player is already in the game
         st.write(f"Welcome, {st.session_state['player_name']}!")
 
-        player = next(
-            (p for p in game.players if p.name == st.session_state["player_name"]), None
-        )
+        player = [p for p in game.players if p.name == st.session_state["player_name"]]
+        if player:
+            player = player[0]
+            st.write(f"Current Player: {player.name} ({player.role.value})")
         if not player:
             return
 
@@ -254,11 +255,11 @@ def display_main_interface():
     if not player:
         st.warning("Please join the game first!")
         return
-    player = next((p for p in get_shared_game().players if p.name == player), None)
-
+    player = [p for p in get_shared_game().players if p.name == player]
     if not player:
         st.warning("Player not found!")
         return
+    player = player[0]
 
     if player.role.value == "card_maker":
         st.subheader("Card Maker Controls")
@@ -305,6 +306,7 @@ def game_controls():
     if st.button("🗑️ Reset Game"):
         # Clear the cache to get a fresh game instance
         get_shared_game.clear()
+        st.session_state.clear()
         st.success("Game reset!")
         st.rerun()
 
@@ -321,9 +323,9 @@ def display_card(card: Card):
     team_color = "neutral"
 
     if current_player_name:
-        current_player = next(
-            (p for p in game.players if p.name == current_player_name), None
-        )
+        current_player = [p for p in game.players if p.name == current_player_name]
+        if current_player:
+            current_player = current_player[0]
         if current_player and hasattr(current_player, "team"):
             team_color = (
                 current_player.team.value
@@ -396,7 +398,9 @@ def leader_interface():
     if not player:
         st.warning("Please join the game first!")
         return
-    player = next((p for p in get_shared_game().players if p.name == player), None)
+    player = [p for p in get_shared_game().players if p.name == player]
+    if player:
+        player = player[0]
 
     if not game.ongoing:
         st.warning("Game is not ongoing. Please start the game first.")
@@ -444,7 +448,9 @@ def guesser_interface():
     if not player:
         st.warning("Please join the game first!")
         return
-    player = next((p for p in get_shared_game().players if p.name == player), None)
+    player = [p for p in get_shared_game().players if p.name == player]
+    if player:
+        player = player[0]
 
     if not game.ongoing:
         st.warning("Game is not ongoing. Please start the game first.")
