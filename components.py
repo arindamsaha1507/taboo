@@ -246,6 +246,10 @@ def display_full_player_state(game: Game):
 def display_main_interface():
     """Display the main interface for the Taboo game."""
 
+    game = get_shared_game()
+
+    st.markdown(f"#### Turn {game.current_turn} of Round {game.current_round}")
+
     player = st.session_state.get("player_name")
     if not player:
         st.warning("Please join the game first!")

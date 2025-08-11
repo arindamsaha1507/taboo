@@ -148,8 +148,8 @@ class Game:
     """Data class to represent the game state."""
 
     players: list[Player] = field(default_factory=list)
-    current_round: int = 0
-    current_turn: int = 0
+    current_round: int = 1
+    current_turn: int = 1
     max_rounds: int = 5
     ongoing: bool = False
     turns: list[Turn] = field(default_factory=list)
@@ -165,6 +165,13 @@ class Game:
         if self.current_turn >= self.max_turns:
             st.warning("Game over! No more turns left.")
             return False
+
+        if self.current_turn % 2 == 0:
+            self.current_round += 1
+            if self.current_round > self.max_rounds:
+                st.warning("Game over! Maximum rounds reached.")
+                return False
+
         return True
 
     @property
@@ -245,7 +252,7 @@ class Game:
 
         self.ongoing = True
         self.current_round = 1
-        self.current_turn = 0
+        self.current_turn = 1
         self.turns = []
         st.success("Game started successfully!")
         return True

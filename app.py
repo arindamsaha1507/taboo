@@ -16,11 +16,19 @@ def main():
 
     st.title("Taboo Game")
 
-    # Display auto-updating game state
-    display_player_state()
-
     # Get the shared game instance for user interactions
     game = get_shared_game()
+
+    with st.expander("Debug Information", expanded=False):
+        st.write("This section is for debugging purposes.")
+        st.write("You can add any debug information here.")
+        st.write("Current game state:")
+        st.write(game)
+        st.write("Current Session State:")
+        st.write(st.session_state)
+
+    # Display auto-updating game state
+    display_player_state()
 
     # Add player functionality
 
