@@ -4,6 +4,7 @@ from datetime import datetime
 from dataclasses import dataclass, field
 from enum import Enum
 
+
 import streamlit as st
 
 MIN_PLAYERS = 4
@@ -250,6 +251,7 @@ class Game:
     def start_game(self):
         """Start the game if all conditions are met."""
         if not self.check_teams():
+            st.error("Cannot start the game. Please check team and role assignments.")
             return False
 
         self.ongoing = True

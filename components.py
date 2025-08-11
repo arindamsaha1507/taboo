@@ -45,20 +45,22 @@ def add_player(game: Game):
         if player.team == Team.B:
             current_team_index = 1
 
-        team_choice = st.selectbox(
-            "Select your team:",
-            options=team_options,
-            index=current_team_index,
-            key="team_selector",
-        )
+        if not game.turns:
 
-        if st.button("Update Team"):
-            player.team = Team.A if team_choice == "Team A" else Team.B
+            team_choice = st.selectbox(
+                "Select your team:",
+                options=team_options,
+                index=current_team_index,
+                key="team_selector",
+            )
 
-            # Reset role when team changes
-            player.role = Role.UNASSIGNED
-            st.success(f"Team updated to {team_choice}!")
-            st.rerun()
+            if st.button("Update Team"):
+                player.team = Team.A if team_choice == "Team A" else Team.B
+
+                # Reset role when team changes
+                player.role = Role.UNASSIGNED
+                st.success(f"Team updated to {team_choice}!")
+                st.rerun()
 
         # Role selection (always available if team is assigned)
         if player.team != Team.U:
@@ -300,6 +302,7 @@ def game_controls():
 
             if game.check_teams():
                 game.start_game()
+                time.sleep(2)
 
             st.rerun()
 
@@ -349,9 +352,13 @@ def card_maker_controls():
         time.sleep(2)
         st.rerun()
 
-    if game.turns and game.turns[-1].card is not None:
+    if (
+        game.turns
+        and len(game.turns) == game.current_turn
+        and game.turns[game.current_turn - 1].card is not None
+    ):
         # st.warning("A card has already been created for this turn.")
-        display_card(game.turns[-1].card)
+        display_card(game.turns[game.current_turn - 1].card)
 
     else:
         st.subheader("Create New Card")
@@ -408,8 +415,12 @@ def leader_interface():
         st.rerun()
 
     # Display current card if available
-    if game.turns and game.turns[-1].card is not None:
-        display_card(game.turns[-1].card)
+    if (
+        game.turns
+        and len(game.turns) == game.current_turn
+        and game.turns[game.current_turn - 1].card is not None
+    ):
+        display_card(game.turns[game.current_turn - 1].card)
     else:
         st.info("No card created yet. Please create a card first.")
 
@@ -488,8 +499,12 @@ def checker_interface():
 
     # player = st.session_state.get("player_name")
 
-    if game.turns and game.turns[-1].card is not None:
-        display_card(game.turns[-1].card)
+    if (
+        game.turns
+        and len(game.turns) == game.current_turn
+        and game.turns[game.current_turn - 1].card is not None
+    ):
+        display_card(game.turns[game.current_turn - 1].card)
     else:
         st.info("No card created yet. Please create a card first.")
 
