@@ -61,22 +61,22 @@ class Player:
     score: int = field(default=0)
 
     @property
-    def is_leader(self):
+    def is_leader(self) -> bool:
         """Check if the player is a leader."""
         return self.role == Role.LEADER
 
     @property
-    def is_checker(self):
+    def is_checker(self) -> bool:
         """Check if the player is a checker."""
         return self.role == Role.CHECKER
 
     @property
-    def is_card_maker(self):
+    def is_card_maker(self) -> bool:
         """Check if the player is a card maker."""
         return self.role == Role.CARD_MAKER
 
     @property
-    def is_guesser(self):
+    def is_guesser(self) -> bool:
         """Check if the player is a guesser."""
         return self.role == Role.GUESSER
 
@@ -104,17 +104,17 @@ class Turn:
         self.guessers.append(player)
 
     @property
-    def successfully_guessed(self):
+    def successfully_guessed(self) -> bool:
         """Check if the card was successfully guessed."""
         return self.guesses and self.guesses[-1] == self.card.word
 
     @property
-    def unsuccessfully_guessed(self):
+    def unsuccessfully_guessed(self) -> bool:
         """Check if the card was unsuccessfully guessed."""
         return not self.successfully_guessed and len(self.guesses) >= self.max_guesses
 
     @property
-    def is_ongoing(self):
+    def is_ongoing(self) -> bool:
         """Check if the turn is ongoing."""
         return (
             not self.successfully_guessed
@@ -175,17 +175,17 @@ class Game:
         return True
 
     @property
-    def max_turns(self):
+    def max_turns(self) -> int:
         """Calculate the maximum number of turns based on the number of players."""
         return self.max_rounds * 2
 
     @property
-    def checking_team(self):
+    def checking_team(self) -> Team:
         """Determine which team is currently checking."""
         return Team.A if self.current_turn % 2 == 0 else Team.B
 
     @property
-    def guessing_team(self):
+    def guessing_team(self) -> Team:
         """Determine which team is currently guessing."""
         return Team.B if self.current_turn % 2 == 0 else Team.A
 
