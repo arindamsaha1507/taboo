@@ -194,6 +194,17 @@ class Game:
         return True
 
     @property
+    def score(self) -> tuple[int, int]:
+        """Calculate the score for both teams."""
+
+        if not self.turns:
+            return (0, 0)
+
+        team_a_score = sum(turn.score[0] for turn in self.turns)
+        team_b_score = sum(turn.score[1] for turn in self.turns)
+        return team_a_score, team_b_score
+
+    @property
     def max_turns(self) -> int:
         """Calculate the maximum number of turns based on the number of players."""
         return self.max_rounds * 2

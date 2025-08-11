@@ -256,9 +256,23 @@ def display_main_interface():
     )
 
     if game.turns and len(game.turns) == game.current_turn and game.turns[-1].end_turn:
-        st.markdown("Score for the turn is:")
-        st.markdown(f"Team A: {game.turns[-1].score[0]}")
-        st.markdown(f"Team B: {game.turns[-1].score[1]}")
+
+        if game.turns[-1].score == (0, 0):
+            st.info("No score this turn. Waiting for next turn.")
+
+        elif game.turns[-1].score[0] > 0 or game.turns[-1].score[1] > 0:
+            st.success(
+                f"Turn ended with score: Team A - {game.turns[-1].score[0]}, Team B - {game.turns[-1].score[1]}"
+            )
+
+        else:
+            st.error("Turn ended with negative score. Please check the game state.")
+
+        st.markdown("### Total Score")
+        team_a_score, team_b_score = game.score
+        st.markdown(f"**Team A:** {team_a_score} - **Team B:** {team_b_score}")
+
+        st.markdown("### Chat Boxes")
 
         chat_boxes()
 
@@ -400,6 +414,9 @@ def chat_boxes():
 
     with col1:
         st.subheader("Hints")
+        st.markdown(
+            f"**Number of hints left:** {game.turns[-1].max_hints - len(game.turns[-1].hints)}"
+        )
         with st.container(height=500):
             if game.turns:
                 for hint, hinter in zip(game.turns[-1].hints, game.turns[-1].hinters):
@@ -407,6 +424,9 @@ def chat_boxes():
 
     with col2:
         st.subheader("Guesses")
+        st.markdown(
+            f"**Number of guesses left:** {game.turns[-1].max_guesses - len(game.turns[-1].guesses)}"
+        )
         with st.container(height=500):
             if game.turns:
                 for guess, guesser in zip(
