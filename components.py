@@ -504,3 +504,9 @@ def checker_interface():
                     game.turns[-1].guesses, game.turns[-1].guessers
                 ):
                     st.write(f"💭 {guesser.name}: {guess.capitalize()}")
+
+    if st.button("Claim Cheating", width="stretch"):
+        game.next_turn()
+        st.success("Cheating claimed! Moving to next turn.")
+        time.sleep(2)
+        st.rerun()

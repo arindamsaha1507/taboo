@@ -166,7 +166,7 @@ class Game:
             st.warning("Game over! No more turns left.")
             return False
 
-        if self.current_turn % 2 == 0:
+        if (self.current_turn - 1) % 2 == 0:
             self.current_round += 1
             if self.current_round > self.max_rounds:
                 st.warning("Game over! Maximum rounds reached.")
@@ -251,9 +251,6 @@ class Game:
             return False
 
         self.ongoing = True
-        self.current_round = 1
-        self.current_turn = 1
-        self.turns = []
         st.success("Game started successfully!")
         return True
 
