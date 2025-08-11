@@ -1,0 +1,309 @@
+/* Player Board Styles */
+.player-board {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 15px;
+  padding: 20px;
+  margin: 10px 0;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.game-stats {
+  display: flex;
+  justify-content: space-around;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 15px;
+  margin: 10px 0;
+  color: white;
+  font-weight: bold;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 2em;
+  color: #ffd700;
+}
+
+.player-table {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 10px;
+  padding: 15px;
+  margin: 15px 0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.team-a {
+  background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-weight: bold;
+  text-align: center;
+  margin: 2px;
+}
+
+.team-b {
+  background: linear-gradient(45deg, #4ecdc4, #6dddd8);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-weight: bold;
+  text-align: center;
+  margin: 2px;
+}
+
+.unassigned {
+  background: linear-gradient(45deg, #95a5a6, #bdc3c7);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-weight: bold;
+  text-align: center;
+  margin: 2px;
+}
+
+.role-leader {
+  background: #ffd700;
+  color: #333;
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+
+.role-guesser {
+  background: #98fb98;
+  color: #333;
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+
+.role-checker {
+  background: #ffa07a;
+  color: #333;
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+
+.role-master {
+  background: #dda0dd;
+  color: #333;
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+
+.role-card_maker {
+  background: #9b59b6;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+
+.role-unassigned {
+  background: #bdc3c7;
+  color: #555;
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-size: 0.8em;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.current-player {
+  border: 2px solid #ffd700;
+  background: rgba(255, 215, 0, 0.1);
+}
+
+/* Taboo Card Styles - Sticky Note/Index Card Theme */
+.taboo-card {
+  background: linear-gradient(135deg, #fffacd 0%, #fff8dc 100%);
+  border: 1px solid #deb887;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 400px;
+  min-height: 300px;
+  position: relative;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.1);
+  transform: rotate(-1deg);
+  transition: all 0.3s ease;
+  font-family: "Comic Sans MS", "Marker Felt", cursive, sans-serif;
+  border-left: 4px solid #d2b48c;
+}
+
+.taboo-card:hover {
+  transform: rotate(0deg) translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2), 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.taboo-card.team-team-a {
+  border-left-color: #ff6b6b;
+  background: linear-gradient(135deg, #fff0f0 0%, #ffe8e8 100%);
+}
+
+.taboo-card.team-team-b {
+  border-left-color: #4ecdc4;
+  background: linear-gradient(135deg, #f0ffff 0%, #e8fffe 100%);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+  padding-bottom: 8px;
+  border-bottom: 2px dotted #d2b48c;
+}
+
+.card-icon {
+  font-size: 1.2em;
+  margin-right: 8px;
+}
+
+.card-title {
+  font-size: 0.9em;
+  font-weight: bold;
+  color: #8b4513;
+  letter-spacing: 1px;
+}
+
+.main-word-section {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.main-word {
+  font-size: 2.5em;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 8px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  font-family: "Arial Black", Arial, sans-serif;
+}
+
+.word-underline {
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    #8b4513 20%,
+    #8b4513 80%,
+    transparent 100%
+  );
+  margin: 0 auto;
+  width: 80%;
+  border-radius: 2px;
+}
+
+.taboo-section {
+  margin-top: 25px;
+}
+
+.taboo-header {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #c0392b;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.taboo-words-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 15px;
+  padding: 0 10px;
+}
+
+.taboo-word {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px dashed #d2b48c;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.9em;
+  color: #2c3e50;
+  text-align: center;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  display: block;
+  margin: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.taboo-word:hover {
+  background: rgba(255, 255, 255, 0.95);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.team-indicator {
+  position: absolute;
+  bottom: 10px;
+  right: 15px;
+  font-size: 0.8em;
+  color: #666;
+  font-weight: bold;
+  padding: 3px 8px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.team-indicator.team-team-a {
+  background: rgba(255, 107, 107, 0.2);
+  color: #c0392b;
+}
+
+.team-indicator.team-team-b {
+  background: rgba(78, 205, 196, 0.2);
+  color: #16a085;
+}
+
+.team-indicator.team-neutral {
+  background: rgba(149, 165, 166, 0.2);
+  color: #7f8c8d;
+}
+
+/* Add a subtle paper texture effect */
+.taboo-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: radial-gradient(
+      circle at 20% 50%,
+      transparent 20%,
+      rgba(255, 255, 255, 0.3) 21%,
+      rgba(255, 255, 255, 0.3) 34%,
+      transparent 35%,
+      transparent
+    ),
+    linear-gradient(
+      0deg,
+      transparent 24%,
+      rgba(255, 255, 255, 0.05) 25%,
+      rgba(255, 255, 255, 0.05) 26%,
+      transparent 27%,
+      transparent 74%,
+      rgba(255, 255, 255, 0.05) 75%,
+      rgba(255, 255, 255, 0.05) 76%,
+      transparent 77%,
+      transparent
+    );
+  border-radius: 8px;
+  pointer-events: none;
+}
