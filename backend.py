@@ -49,6 +49,9 @@ class Card:
                 "Please ensure it has enough taboo words."
             )
 
+        self.word = self.word.strip().capitalize()
+        self.taboo_words = [word.strip().capitalize() for word in self.taboo_words]
+
 
 @dataclass
 class Player:
@@ -101,6 +104,7 @@ class Turn:
 
     def add_hint(self, hint: str, player: Player):
         """Add a hint to the turn."""
+        hint = hint.strip().capitalize()
         self.hints.append(hint)
         self.hinters.append(player)
 
