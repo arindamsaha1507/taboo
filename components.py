@@ -428,7 +428,7 @@ def end_turn(score: int):
         game.turns[-1].score = (1, 0) if game.guessing_team == Team.A else (0, 1)
 
     elif score == -1:
-        game.turns[-1].score = (0, 1) if game.checking_team == Team.A else (1, 0)
+        game.turns[-1].score = (0, 1) if game.guessing_team == Team.A else (1, 0)
 
     else:
         st.error(
