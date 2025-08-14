@@ -110,6 +110,7 @@ class Turn:
 
     def add_guess(self, guess: str, player: Player):
         """Add a guess to the turn."""
+        guess = guess.strip().capitalize()
         self.guesses.append(guess)
         self.guessers.append(player)
 

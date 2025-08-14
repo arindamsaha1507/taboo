@@ -576,7 +576,10 @@ def guesser_interface():
 
         new_guess = st.text_input("Add a new guess:")
         if st.button("Add Guess"):
-            if new_guess.strip() and new_guess.strip() not in game.turns[-1].guesses:
+            if (
+                new_guess.strip()
+                and new_guess.strip().capitalize() not in game.turns[-1].guesses
+            ):
 
                 game.turns[-1].add_guess(new_guess, player)
 
