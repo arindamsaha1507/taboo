@@ -322,6 +322,8 @@ def display_main_interface():
     else:
         st.subheader("General Player Interface")
         st.write("Main interface placeholder")
+        st.session_state["in_game"] = False
+        st.rerun()
 
 
 @st.fragment(run_every=1)
@@ -341,6 +343,7 @@ def game_controls():
                 st.rerun()
 
             if game.check_teams():
+                st.success("Starting the game...")
                 game.start_game()
                 time.sleep(2)
             else:
@@ -349,6 +352,12 @@ def game_controls():
                 )
                 time.sleep(2)
 
+            st.rerun()
+
+    else:
+        if not st.session_state.get("in_game", False):
+            st.session_state["in_game"] = True
+            print("Flipped the in_game state to True")
             st.rerun()
 
     if st.button("🗑️ Reset Game"):
@@ -428,6 +437,8 @@ def end_turn(score: int):
         return
 
     game.turns[-1].end_turn = True
+    st.session_state["in_game"] = False
+    print("Flipped the turn state to False")
 
 
 def chat_boxes():

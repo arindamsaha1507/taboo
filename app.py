@@ -44,7 +44,17 @@ def main():
         display_main_interface()
 
     else:
+
         add_player(game)
+
+        if (
+            game.players
+            and len(
+                [player for player in game.players if player.role.value == "unassigned"]
+            )
+            == 0
+        ):
+            st.success("Game is ready to start! Waiting for players to start the game.")
 
     # Add game control buttons
     with st.sidebar:
