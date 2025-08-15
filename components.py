@@ -18,6 +18,7 @@ from html_templates import (
     get_player_separator,
     get_no_players_html,
     get_taboo_card_html,
+    get_taboo_card_hidden_html,
     get_scorecard_html,
 )
 
@@ -397,6 +398,35 @@ def display_card(card: Card):
     )
 
 
+def display_card_hidden(card: Card):
+    """Display a single card in sticky note style with content hidden."""
+    if not card:
+        st.warning("No card to display.")
+        return
+
+    # Get current game to determine team context
+    game = get_shared_game()
+    current_player_name = st.session_state.get("player_name")
+    team_color = "neutral"
+
+    if current_player_name:
+        current_player = next(
+            (p for p in game.players if p.name == current_player_name), None
+        )
+        if current_player and hasattr(current_player, "team"):
+            team_color = (
+                current_player.team.value
+                if current_player.team.value != "Unassigned"
+                else "neutral"
+            )
+
+    # Display the hidden card using HTML template
+    st.markdown(
+        get_taboo_card_hidden_html(card.word, card.taboo_words, team_color),
+        unsafe_allow_html=True,
+    )
+
+
 def display_scorecards():
     """Display fancy scorecards showing current game scores."""
     game = get_shared_game()
@@ -450,9 +480,9 @@ def chat_boxes():
     with col1:
         st.subheader("Hints")
         st.markdown(
-            f"**Number of hints left:** {game.turns[-1].max_hints - len(game.turns[-1].hints)}"
+            f"**Hints left:** {game.turns[-1].max_hints - len(game.turns[-1].hints)}"
         )
-        with st.container(height=500):
+        with st.container(height=250):
             if game.turns:
                 for hint, hinter in zip(game.turns[-1].hints, game.turns[-1].hinters):
                     st.write(f"💡 {hinter.name}: {hint.capitalize()}")
@@ -460,14 +490,26 @@ def chat_boxes():
     with col2:
         st.subheader("Guesses")
         st.markdown(
-            f"**Number of guesses left:** {game.turns[-1].max_guesses - len(game.turns[-1].guesses)}"
+            f"**Guesses left:** {game.turns[-1].max_guesses - len(game.turns[-1].guesses)}"
         )
-        with st.container(height=500):
+        with st.container(height=250):
             if game.turns:
                 for guess, guesser in zip(
                     game.turns[-1].guesses, game.turns[-1].guessers
                 ):
                     st.write(f"💭 {guesser.name}: {guess.capitalize()}")
+
+
+def card_and_chat(game, hidden=False):
+    """Display the card and chat boxes side by side."""
+    col1, col2 = st.columns(2)
+    with col1:
+        if hidden:
+            display_card_hidden(game.turns[game.current_turn - 1].card)
+        else:
+            display_card(game.turns[game.current_turn - 1].card)
+    with col2:
+        chat_boxes()
 
 
 def card_maker_controls():
@@ -484,8 +526,8 @@ def card_maker_controls():
         and len(game.turns) == game.current_turn
         and game.turns[game.current_turn - 1].card is not None
     ):
-        # st.warning("A card has already been created for this turn.")
-        display_card(game.turns[game.current_turn - 1].card)
+
+        card_and_chat(game)
 
     else:
         st.subheader("Create New Card")
@@ -504,9 +546,6 @@ def card_maker_controls():
                 st.rerun()
             else:
                 st.error("Please provide both a word and taboo words.")
-
-    if game.turns and len(game.turns) == game.current_turn:
-        chat_boxes()
 
 
 def leader_interface():
@@ -532,18 +571,15 @@ def leader_interface():
         and len(game.turns) == game.current_turn
         and game.turns[game.current_turn - 1].card is not None
     ):
-        display_card(game.turns[game.current_turn - 1].card)
-    else:
-        st.info("No card created yet. Please create a card first.")
 
-    # Additional leader controls can be added here
-
-    if game.turns and len(game.turns) == game.current_turn:
-        chat_boxes()
+        card_and_chat(game)
 
         new_hint = st.text_input("Add a new hint:")
         if st.button("Add Hint"):
-            if new_hint.strip() and new_hint.strip() not in game.turns[-1].hints:
+            if (
+                new_hint.strip()
+                and new_hint.strip().capitalize() not in game.turns[-1].hints
+            ):
 
                 if len(game.turns[-1].hints) < game.turns[-1].max_hints:
                     game.turns[-1].add_hint(new_hint, player)
@@ -556,6 +592,13 @@ def leader_interface():
                     end_turn(-1)
 
                 st.rerun()
+
+    else:
+        st.info("No card created yet. Please create a card first.")
+
+    # Additional leader controls can be added here
+
+    # if game.turns and len(game.turns) == game.current_turn:
 
 
 def guesser_interface():
@@ -583,7 +626,8 @@ def guesser_interface():
         st.rerun()
 
     if game.turns and len(game.turns) == game.current_turn:
-        chat_boxes()
+
+        card_and_chat(game)
 
         new_guess = st.text_input("Add a new guess:")
         if st.button("Add Guess"):
@@ -614,16 +658,14 @@ def checker_interface():
         and len(game.turns) == game.current_turn
         and game.turns[game.current_turn - 1].card is not None
     ):
-        display_card(game.turns[game.current_turn - 1].card)
+
+        card_and_chat(game)
+
+        if st.button("Claim Cheating", width="stretch"):
+            end_turn(-1)
+
     else:
         st.info("No card created yet. Please create a card first.")
 
-    if game.turns and len(game.turns) == game.current_turn:
-        chat_boxes()
-
-        if st.button("Claim Cheating", width="stretch"):
-            # game.next_turn()
-            # st.success("Cheating claimed! Moving to next turn.")
-            # time.sleep(2)
-            # st.rerun()
-            end_turn(-1)
+        # if game.turns and len(game.turns) == game.current_turn:
+        #     chat_boxes()
