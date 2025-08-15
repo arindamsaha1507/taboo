@@ -500,6 +500,18 @@ def chat_boxes():
                     st.write(f"💭 {guesser.name}: {guess.capitalize()}")
 
 
+def card_and_chat(game, hidden=False):
+    """Display the card and chat boxes side by side."""
+    col1, col2 = st.columns(2)
+    with col1:
+        if hidden:
+            display_card_hidden(game.turns[game.current_turn - 1].card)
+        else:
+            display_card(game.turns[game.current_turn - 1].card)
+    with col2:
+        chat_boxes()
+
+
 def card_maker_controls():
     """Display card maker controls for creating new cards."""
     game = get_shared_game()
@@ -515,11 +527,7 @@ def card_maker_controls():
         and game.turns[game.current_turn - 1].card is not None
     ):
 
-        col1, col2 = st.columns(2)
-        with col1:
-            display_card(game.turns[game.current_turn - 1].card)
-        with col2:
-            chat_boxes()
+        card_and_chat(game)
 
     else:
         st.subheader("Create New Card")
@@ -564,31 +572,26 @@ def leader_interface():
         and game.turns[game.current_turn - 1].card is not None
     ):
 
-        col1, col2 = st.columns(2)
-        with col1:
-            display_card(game.turns[game.current_turn - 1].card)
+        card_and_chat(game)
 
-        with col2:
-            chat_boxes()
+        new_hint = st.text_input("Add a new hint:")
+        if st.button("Add Hint"):
+            if (
+                new_hint.strip()
+                and new_hint.strip().capitalize() not in game.turns[-1].hints
+            ):
 
-            new_hint = st.text_input("Add a new hint:")
-            if st.button("Add Hint"):
-                if (
-                    new_hint.strip()
-                    and new_hint.strip().capitalize() not in game.turns[-1].hints
-                ):
-
-                    if len(game.turns[-1].hints) < game.turns[-1].max_hints:
-                        game.turns[-1].add_hint(new_hint, player)
-                    else:
-                        st.error("Maximum hints reached for this turn.")
-                        time.sleep(2)
-                        st.rerun()
-
-                    if game.turns[-1].tabooed:
-                        end_turn(-1)
-
+                if len(game.turns[-1].hints) < game.turns[-1].max_hints:
+                    game.turns[-1].add_hint(new_hint, player)
+                else:
+                    st.error("Maximum hints reached for this turn.")
+                    time.sleep(2)
                     st.rerun()
+
+                if game.turns[-1].tabooed:
+                    end_turn(-1)
+
+                st.rerun()
 
     else:
         st.info("No card created yet. Please create a card first.")
@@ -624,28 +627,24 @@ def guesser_interface():
 
     if game.turns and len(game.turns) == game.current_turn:
 
-        col1, col2 = st.columns(2)
-        with col1:
-            display_card_hidden(game.turns[game.current_turn - 1].card)
-        with col2:
-            chat_boxes()
+        card_and_chat(game)
 
-            new_guess = st.text_input("Add a new guess:")
-            if st.button("Add Guess"):
-                if (
-                    new_guess.strip()
-                    and new_guess.strip().capitalize() not in game.turns[-1].guesses
-                ):
+        new_guess = st.text_input("Add a new guess:")
+        if st.button("Add Guess"):
+            if (
+                new_guess.strip()
+                and new_guess.strip().capitalize() not in game.turns[-1].guesses
+            ):
 
-                    game.turns[-1].add_guess(new_guess, player)
+                game.turns[-1].add_guess(new_guess, player)
 
-                    if game.turns[-1].successfully_guessed:
-                        end_turn(1)
+                if game.turns[-1].successfully_guessed:
+                    end_turn(1)
 
-                    if len(game.turns[-1].guesses) >= game.turns[-1].max_guesses:
-                        end_turn(0)
+                if len(game.turns[-1].guesses) >= game.turns[-1].max_guesses:
+                    end_turn(0)
 
-                    st.rerun()
+                st.rerun()
 
 
 def checker_interface():
@@ -659,11 +658,8 @@ def checker_interface():
         and len(game.turns) == game.current_turn
         and game.turns[game.current_turn - 1].card is not None
     ):
-        col1, col2 = st.columns(2)
-        with col1:
-            display_card(game.turns[game.current_turn - 1].card)
-        with col2:
-            chat_boxes()
+
+        card_and_chat(game)
 
         if st.button("Claim Cheating", width="stretch"):
             end_turn(-1)
