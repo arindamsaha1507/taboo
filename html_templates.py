@@ -113,6 +113,30 @@ def get_taboo_card_html(
     )
 
 
+def get_taboo_card_hidden_html(
+    word: str, taboo_words: list, team_color: str = "neutral"
+) -> str:
+    """Generate HTML for a hidden sticky note style taboo card."""
+    template = load_template("taboo_card_hidden.html")
+
+    # Create hidden taboo words (show count but not content)
+    hidden_taboo_items = ""
+    for _ in range(len(taboo_words)):
+        hidden_taboo_items += '<span class="taboo-word">• ●●●●●</span>'
+
+    team_class = (
+        f"team-{team_color.lower().replace(' ', '-')}"
+        if team_color != "neutral"
+        else "team-neutral"
+    )
+
+    return template.format(
+        hidden_taboo_items=hidden_taboo_items,
+        team_class=team_class,
+        team_color=team_color,
+    )
+
+
 def get_scorecard_html(
     team_a_score: int,
     team_b_score: int,
